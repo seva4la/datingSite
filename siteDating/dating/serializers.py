@@ -4,7 +4,7 @@ from dating.models import User
 
 
 class UserListSerializer(serializers.ModelSerializer):
-   class Meta:
+    class Meta:
        model = User    # модель джанго
        fields = "__all__"
 

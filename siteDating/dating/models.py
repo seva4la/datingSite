@@ -6,6 +6,7 @@ from django.db.models import ForeignKey, PROTECT
 import uuid
 
 
+
 def validate_age(value):
     if value < 18 or value > 99:
         raise ValidationError('Возраст должен быть от 18 до 99 лет.')
@@ -18,7 +19,7 @@ class User(models.Model):
     description = models.TextField (blank=True)
     age = models.IntegerField(validators=[validate_age])
     gender = ForeignKey('Gender', on_delete=PROTECT)
-    # profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
+    profile_image = models.ImageField(upload_to='profile_images/')
 
     def __str__(self):
         return self.name

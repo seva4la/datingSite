@@ -20,6 +20,7 @@ class UserApiUpdateDescription(generics.UpdateAPIView):
 class UserApiDelete(generics.DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
+    lookup_field = 'pk'  # Используем UUID
 
 class UserApiRetriveView(generics.RetrieveAPIView):
     queryset = User.objects.all()
