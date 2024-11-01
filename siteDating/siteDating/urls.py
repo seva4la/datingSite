@@ -26,11 +26,11 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dating/', include('dating.urls')),
-    path('api/v1/UserList/', UserApiListView.as_view()),
-    path('api/v1/UserUpdateDescription/<uuid:pk>', UserApiUpdateDescription.as_view()),
-    path('api/v1/UserDelete/<uuid:pk>', UserApiDelete.as_view()),
-    path('api/v1/UserRetrieve/<uuid:pk>', UserApiRetriveView.as_view()),
-    path('api/v1/UserCreate/', UserApiCreate.as_view()),
+    path('api/v1/UserList/', UserApiListView.as_view()),           # список данных всех пользователей
+    path('api/v1/UserDelete/<uuid:pk>', UserApiDelete.as_view()),  # удаление пользователя по id
+    path('api/v1/UserRetrieve/<uuid:pk>', UserApiRetriveView.as_view()), #получение всех данных пользователя по id
+    path('api/v1/UserUpdate/<uuid:pk>/', UserUpdate.as_view()),    # редактирование имени/возраста/пола/фотографии/описания
+    path('api/v1/UserRegistration/', UserApiRegistrate.as_view()), # регистрация по почте и паролю
 ]
 
 if settings.DEBUG:

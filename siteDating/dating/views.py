@@ -7,25 +7,25 @@ from dating.serializers import *
 def dating(request):
     return HttpResponse("<h1>Сайт знакомств<h1>")
 
+class UserApiRegistrate(generics.CreateAPIView): #регистрация
+    queryset = User.objects.all()
+    serializer_class = UserRegistrateSerializer
 
-class UserApiListView(generics.ListAPIView):
+class UserUpdate(generics.UpdateAPIView): # обновление
+    queryset = User.objects.all()
+    serializer_class = UserUpdateSerializer
+
+class UserApiListView(generics.ListAPIView): #все пользователи
     queryset = User.objects.all()
     serializer_class = UserListSerializer
 
-class UserApiUpdateDescription(generics.UpdateAPIView):
+class UserApiRetriveView(generics.RetrieveAPIView): # конкретный пользователь
     queryset = User.objects.all()
-    serializer_class = UserUpdateDescriptionSerializer
-    #serializer_class =  UserListSerializer
+    serializer_class = UserListSerializer
 
-class UserApiDelete(generics.DestroyAPIView):
+class UserApiDelete(generics.DestroyAPIView): # удаление пользователя
     queryset = User.objects.all()
     serializer_class = UserListSerializer
     lookup_field = 'pk'  # Используем UUID
 
-class UserApiRetriveView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserListSerializer
 
-class UserApiCreate(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserListSerializer
