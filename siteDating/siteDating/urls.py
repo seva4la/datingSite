@@ -22,15 +22,31 @@ from dating.urls import *
 from dating.views import *
 from django.conf.urls.static import static
 from django.conf import settings
+from django.urls import path
+from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
+    #не используется
     path('admin/', admin.site.urls),
     path('dating/', include('dating.urls')),
-    path('api/v1/UserList/', UserApiListView.as_view()),           # список данных всех пользователей
-    path('api/v1/UserDelete/<uuid:pk>', UserApiDelete.as_view()),  # удаление пользователя по id
-    path('api/v1/UserRetrieve/<uuid:pk>', UserApiRetriveView.as_view()), #получение всех данных пользователя по id
-    path('api/v1/UserUpdate/<uuid:pk>/', UserUpdate.as_view()),    # редактирование имени/возраста/пола/фотографии/описания
-    path('api/v1/UserRegistration/', UserApiRegistrate.as_view()), # регистрация по почте и паролю
+    #аутентификация по токенам
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),    # путь для получения access и refresh токенов
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),   # путь для обновления access токена
+    #регистрация по почте и паролю
+    path('api/UserRegistration/', UserApiRegistrate.as_view()),
+    #список всех пользователей и их данные
+    path('api/UserList/', UserApiListView.as_view()),
+    #обновление данных пользователя
+    path('api/UserUpdate/<uuid:pk>/', UserUpdate.as_view()),
+    #удаление пользователя
+    path('api/UserDelete/<uuid:pk>', UserApiDelete.as_view()),  # удаление пользователя по id
+    #данные конкретного пользователя
+    path('api/UserRetrieve/<uuid:pk>', UserApiRetriveView.as_view()),  # получение всех данных пользователя по id
+
 ]
 
 if settings.DEBUG:

@@ -3,6 +3,11 @@ from django.shortcuts import render
 from rest_framework import generics
 from dating.models import User
 from dating.serializers import *
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+
 
 def dating(request):
     return HttpResponse("<h1>Сайт знакомств<h1>")
@@ -27,5 +32,3 @@ class UserApiDelete(generics.DestroyAPIView): # удаление пользов�
     queryset = User.objects.all()
     serializer_class = UserListSerializer
     lookup_field = 'pk'  # Используем UUID
-
-
