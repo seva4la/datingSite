@@ -24,12 +24,12 @@ class UserRegistrateSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError("Пароли не совпадают")
 
+
 #список полной информации всех юзеров
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
        model = User
        fields = "__all__"
-    permission_classes = [IsAuthenticated]
 
 #обновление данных пользователя
 class UserUpdateSerializer(serializers.ModelSerializer):
@@ -61,3 +61,4 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         # Сохраняем обновлённый экземпляр
         instance.save()
         return instance
+

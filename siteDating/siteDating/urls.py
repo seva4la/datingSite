@@ -47,6 +47,8 @@ urlpatterns = [
     #данные конкретного пользователя
     path('api/UserRetrieve/<uuid:pk>', UserApiRetriveView.as_view()),  # получение всех данных пользователя по id
 
+    path('api/UserLike/', UserLikeAPIView.as_view(), name='user_like'),
+    path('api/UserLikedMe/', UserLikedMeAPIView.as_view(), name='user_liked_me'),
 ]
 
 if settings.DEBUG:
