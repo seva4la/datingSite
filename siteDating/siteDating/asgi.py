@@ -22,12 +22,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'siteDating.settings')
 
 
 application = ProtocolTypeRouter({
-    "http": get_asgi_application(),  # Стандартный HTTP-протокол
-    "websocket": AllowedHostsOriginValidator(  # Добавляем поддержку WebSocket
-        AuthMiddlewareStack(
-            URLRouter(
-                websocket_urlpatterns
-            )
-        )
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
+        URLRouter(websocket_urlpatterns)
     ),
 })

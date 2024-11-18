@@ -5,18 +5,15 @@ import json
 class LikesConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # Проверяем, что пользователь аутентифицирован
-        if self.scope["user"] == AnonymousUser():
+        if self.scope["user"].is_authenticated:
+            print(f"User {self.scope['user'].id} is authenticated.")
+        else:
+            print("Anonymous user tried to connect")
             await self.close()  # Закрываем соединение для анонимных пользователей
             return
 
-        self.user = self.scope["user"]
-        self.group_name = f"user_{self.user.id}_likes"
-
-        # Присоединяемся к группе
-        await self.channel_layer.group_add(
-            self.group_name,
-            self.channel_name
-        )
+        self.group_name = f"user_{self.scope['user'].id}_likes"
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -28,8 +25,7 @@ class LikesConsumer(AsyncWebsocketConsumer):
             )
 
     async def receive(self, text_data):
-        # Обрабатываем входящие сообщения (если нужно)
-        pass
+        print(f"Received message: {text_data}")
 
     async def send_like_update(self, event):
         # Проверяем, что group_name был инициализирован перед отправкой данных

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-8^)x4)cd7*+exiz-qu3w83mf_&--cfzzpbdve1gqruxkr-r7aj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -60,11 +60,16 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
-    'http://127.0.0.1:8000',
 ]
 
 
 ROOT_URLCONF = 'siteDating.urls'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 TEMPLATES = [
     {
@@ -85,6 +90,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'siteDating.wsgi.application'
 
 ASGI_APPLICATION = 'siteDating.asgi.application'
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -157,8 +163,4 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = 'dating.User'
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-    },
-}
+

@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
+
 def validate_age(value):
     if value < 18 or value > 99:
         raise ValidationError('Возраст должен быть от 18 до 99 лет.')
@@ -38,12 +39,13 @@ class User(AbstractUser):
 
         # Отправляем уведомление через WebSocket
         channel_layer = get_channel_layer()
+
         async_to_sync(channel_layer.group_send)(
             f"user_{other_user.id}_likes",
             {
                 "type": "send_like_update",
                 "data": {
-                    "liked_by": self.id,  # ID пользователя, который поставил лайк
+                    "liked_by": self.id,
                     "liked_by_email": self.email,
                 }
             }
