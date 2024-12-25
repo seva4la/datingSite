@@ -22,22 +22,20 @@ class User(AbstractUser):
     gender = models.ForeignKey('Gender', on_delete=models.PROTECT, null=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True)
 
-    # Уникальные имена для обратных связей
     groups = models.ManyToManyField(Group, related_name='dating_user_set', blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name='dating_user_set', blank=True)
 
-    USERNAME_FIELD = 'email'  # Указываем, что для аутентификации используется email
-    REQUIRED_FIELDS = []  # Поля, обязательные для создания пользователя
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     likes = ManyToManyField('self', related_name='liked_by', symmetrical=False, blank=True)
 
     def like_user(self, other_user):
-        if other_user == self or self.likes.filter(id=other_user.id).exists():
+        if other_user == self:
             return False
 
         self.likes.add(other_user)
 
-        # Отправляем уведомление через WebSocket
         channel_layer = get_channel_layer()
 
         async_to_sync(channel_layer.group_send)(

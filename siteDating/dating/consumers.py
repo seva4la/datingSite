@@ -8,20 +8,17 @@ import uuid
 
 class LikesConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        # Проверяем, аутентифицирован ли пользователь
         if self.scope["user"].is_authenticated:
             print(f"User {self.scope['user'].id} is authenticated.")
             self.group_name = f"user_{self.scope['user'].id}_likes"
         else:
             print("Anonymous user connected.")
-            self.group_name = "anonymous_likes"  # Если не аутентифицирован, назначаем анонимную группу
+            self.group_name = "anonymous_likes"
 
-        # Добавляем пользователя в группу WebSocket
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):
-        # Отсоединяем пользователя от группы при отключении
         if hasattr(self, 'group_name'):
             await self.channel_layer.group_discard(
                 self.group_name,
@@ -42,12 +39,10 @@ class LikesConsumer(AsyncWebsocketConsumer):
                     }))
                     return
 
-                # Проверка и декодирование токена
                 try:
                     decoded_token = AccessToken(token)
                     user_id = decoded_token["user_id"]
 
-                    # Преобразуем user_id в UUID (если это необходимо) и получаем пользователя
                     try:
                         user_id = uuid.UUID(user_id)
                     except ValueError:
@@ -57,13 +52,12 @@ class LikesConsumer(AsyncWebsocketConsumer):
                         }))
                         return
 
-                    # Получаем пользователя асинхронно
-                    User = get_user_model()  # Получаем кастомную модель пользователя
+                    User = get_user_model()
                     user = await sync_to_async(User.objects.get)(id=user_id)
 
-                    # Аутентификация пользователя
+
                     self.scope["user"] = user
-                    self.group_name = f"user_{str(user.id)}_likes"  # Преобразуем UUID в строку
+                    self.group_name = f"user_{str(user.id)}_likes"
                     await self.channel_layer.group_add(
                         self.group_name,
                         self.channel_name
@@ -104,7 +98,7 @@ class LikesConsumer(AsyncWebsocketConsumer):
             # Отправка сообщения всем пользователям в группе
             event_data = event["data"]
 
-            # Преобразуем все UUID в строку перед отправкой
+
             if isinstance(event_data, dict):
                 event_data = {key: (str(value) if isinstance(value, uuid.UUID) else value) for key, value in event_data.items()}
 
